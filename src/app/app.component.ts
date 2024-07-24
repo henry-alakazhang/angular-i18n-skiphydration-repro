@@ -19,9 +19,22 @@ export class UnhydratedTextComponent {
 }
 
 @Component({
+  selector: 'app-has-i18n',
+  template: '<div i18n> Text </div>',
+  standalone: true,
+})
+export class HasI18nComponent {}
+
+@Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, TextComponent, UnhydratedTextComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    TextComponent,
+    UnhydratedTextComponent,
+    HasI18nComponent,
+  ],
   template: `
     <!-- OK -->
     <div i18n>
@@ -42,6 +55,9 @@ export class UnhydratedTextComponent {
     <!-- <app-unhydrated-text>
       <div i18n>Title!</div>
     </app-unhydrated-text> -->
+
+    <!-- Also OK -->
+    <app-has-i18n ngSkipHydration />
   `,
 })
 export class AppComponent {}
