@@ -3,34 +3,29 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-display-card',
-  standalone: true,
-  template: `
-    <div>
-      <h1>
-        <ng-content select="app-title"></ng-content>
-      </h1>
-      And some other stuff
-    </div>
-  `,
-})
-export class DisplayCardComponent {}
-
-@Component({
-  selector: 'app-title',
+  selector: 'app-text',
   template: '<ng-content></ng-content>',
   standalone: true,
 })
-export class TitleComponent {}
+export class TextComponent {}
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, TitleComponent, DisplayCardComponent],
+  imports: [CommonModule, RouterOutlet, TextComponent],
   template: `
-    <app-display-card>
-      <app-title i18n ngSkipHydration> Title! </app-title>
-    </app-display-card>
+    <!-- OK -->
+    <div i18n>
+      <app-text ngSkipHydration> Title! </app-text>
+    </div>
+
+    <!-- OK -->
+    <app-text ngSkipHydration>
+      <div i18n>Title!</div>
+    </app-text>
+
+    <!-- not ok -->
+    <!-- <app-text i18n ngSkipHydration> Title! </app-text> -->
   `,
 })
 export class AppComponent {}
