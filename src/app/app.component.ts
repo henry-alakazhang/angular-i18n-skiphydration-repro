@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { Component, HostBinding } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { CommonModule, NgIf } from '@angular/common';
+import { Component, HostBinding, inject } from '@angular/core';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-text',
@@ -26,6 +26,20 @@ export class UnhydratedTextComponent {
 export class HasI18nComponent {}
 
 @Component({
+  imports: [NgIf],
+  selector: 'app-projected',
+  template: `
+    <ng-container *ngIf="project">
+      <ng-content></ng-content>
+    </ng-container>
+  `,
+  standalone: true,
+})
+export class ProjectedComponent {
+  project = inject(ActivatedRoute).snapshot.queryParamMap.has('project');
+}
+
+@Component({
   selector: 'app-root',
   standalone: true,
   imports: [
@@ -34,6 +48,7 @@ export class HasI18nComponent {}
     TextComponent,
     UnhydratedTextComponent,
     HasI18nComponent,
+    ProjectedComponent,
   ],
   template: `
     <!-- OK -->
@@ -58,6 +73,12 @@ export class HasI18nComponent {}
 
     <!-- Also OK -->
     <app-has-i18n ngSkipHydration />
+
+    <!-- Also breaks if node is disconnected:
+         ASSERTION ERROR: Expected root i18n node during hydration -->
+    <app-projected>
+      <div i18n>This content is not projected</div>
+    </app-projected>
   `,
 })
 export class AppComponent {}
